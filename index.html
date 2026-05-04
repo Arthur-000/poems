@@ -122,28 +122,28 @@
         <h3>09/05/2026: Percurso</h3>
         <p>Muito bem! Onde anda o mundo?</p>
         <div class="clue-box">"Embaixo do mundo (globo terrestre) da sala."</div>
-        <input type="text" id="input2" placeholder="Próxima palavra-passe...">
+        <input type="text" id="input2" placeholder="Qual a última palavra do poema?">
         <button onclick="checkLevel(2, 'MAPA')">Verificar</button>
     </div>
 
     <div class="level" id="level3">
         <h3>10/05/2026: Mães</h3>
         <div class="clue-box">"Embaixo do Sartre, no quarto de hóspedes."</div>
-        <input type="text" id="input3" placeholder="Palavra encontrada?">
+        <input type="text" id="input3" placeholder="Qual a última palavra do poema?">
         <button onclick="checkLevel(3, 'FILHINHO')">Verificar</button>
     </div>
 
     <div class="level" id="level4">
         <h3>11/05/2026: Retorno</h3>
         <div class="clue-box">"O poema vive na caixinha, junto com os dinossauros."</div>
-        <input type="text" id="input4" placeholder="Penúltima palavra...">
+        <input type="text" id="input4" placeholder="Qual a última palavra do poema?">
         <button onclick="checkLevel(4, 'DESCOMPOSTO')">Verificar</button>
     </div>
 
     <div class="level" id="level5">
         <h3>12/05/2026: Chegada</h3>
         <div class="clue-box">"Atrás do espelho da sala..."</div>
-        <input type="text" id="input5" placeholder="A última palavra de todas!">
+        <input type="text" id="input5" placeholder="Qual a última palavra do poema?">
         <button onclick="checkLevel(5, 'ABARCAR')">Finalizar</button>
     </div>
 
@@ -156,11 +156,11 @@
 <script>
     // Configuração das datas de liberação (Ano, Mês [0-11], Dia)
     const unlockDates = {
-        1: new Date(2026, 4, 8),  // 08/05/2026 (Maio é mês 4 no JS)
-        2: new Date(2026, 4, 9),  // 09/05/2026
-        3: new Date(2026, 4, 10), // 10/05/2026
-        4: new Date(2026, 4, 11), // 11/05/2026
-        5: new Date(2026, 4, 12)  // 12/05/2026
+        1: new Date(2026, 4, 4),  // 08/05/2026 (Maio é mês 4 no JS)
+        2: new Date(2026, 4, 4),  // 09/05/2026
+        3: new Date(2026, 4, 4), // 10/05/2026
+        4: new Date(2026, 4, 4), // 11/05/2026
+        5: new Date(2026, 4, 4)  // 12/05/2026
     };
 
     function checkLevel(currentLevel, correctWord) {
