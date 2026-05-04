@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Busca pelos Textos</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --accent: #e74c3c;
+            --bg: #f4f7f6;
+            --text: #333;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        h1 { text-align: center; color: var(--primary); margin-bottom: 10px; }
+        .instruction { text-align: center; font-size: 0.9em; color: #666; margin-bottom: 20px; }
+        
+        .progress-bar {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            background: #eee;
+            border-radius: 20px;
+            padding: 5px;
+        }
+
+        .step-dot {
+            width: 30px; height: 30px;
+            border-radius: 50%;
+            background: #ccc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .step-dot.active { background: var(--accent); transform: scale(1.2); }
+        .step-dot.completed { background: #27ae60; }
+
+        .level { display: none; animation: fadeIn 0.5s; }
+        .level.active { display: block; }
+
+        .clue-box {
+            background: #f9f9f9;
+            border-left: 5px solid var(--accent);
+            padding: 15px;
+            margin: 20px 0;
+            font-style: italic;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        button:hover { background: #34495e; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🔍 Caça-poemas</h1>
+    <p class="instruction">Um novo desafio será liberado a cada dia. Volte amanhã para a próxima pista!</p>
+    
+    <div class="progress-bar">
+        <div class="step-dot active" id="dot1">1</div>
+        <div class="step-dot" id="dot2">2</div>
+        <div class="step-dot" id="dot3">3</div>
+        <div class="step-dot" id="dot4">4</div>
+        <div class="step-dot" id="dot5">5</div>
+    </div>
+
+    <div class="level active" id="level1">
+        <h3>08/05/2026: A ida</h3>
+        <p>Para começar, você precisa encontrar o primeiro poeminha.</p>
+        <div class="clue-box">"Procure embaixo da madeira do kit de coquetéis."</div>
+        <input type="text" id="input1" placeholder="Qual a última palavra do poema?">
+        <button onclick="checkLevel(1, 'SAUDADE')">Verificar</button>
+    </div>
+
+    <div class="level" id="level2">
+        <h3>09/05/2026: Percurso</h3>
+        <p>Muito bem! Onde anda o mundo?</p>
+        <div class="clue-box">"Embaixo do mundo (globo terrestre) da sala."</div>
+        <input type="text" id="input2" placeholder="Próxima palavra-passe...">
+        <button onclick="checkLevel(2, 'MAPA')">Verificar</button>
+    </div>
+
+    <div class="level" id="level3">
+        <h3>10/05/2026: Mães</h3>
+        <div class="clue-box">"Embaixo do Sartre, no quarto de hóspedes."</div>
+        <input type="text" id="input3" placeholder="Palavra encontrada?">
+        <button onclick="checkLevel(3, 'FILHINHO')">Verificar</button>
+    </div>
+
+    <div class="level" id="level4">
+        <h3>11/05/2026: Retorno</h3>
+        <div class="clue-box">"O poema vive na caixinha, junto com os dinossauros."</div>
+        <input type="text" id="input4" placeholder="Penúltima palavra...">
+        <button onclick="checkLevel(4, 'DESCOMPOSTO')">Verificar</button>
+    </div>
+
+    <div class="level" id="level5">
+        <h3>12/05/2026: Chegada</h3>
+        <div class="clue-box">"Atrás do espelho da sala..."</div>
+        <input type="text" id="input5" placeholder="A última palavra de todas!">
+        <button onclick="checkLevel(5, 'ABARCAR')">Finalizar</button>
+    </div>
+
+    <div id="final-screen" style="display:none; text-align:center;">
+        <h2>🎉 Parabéns!</h2>
+        <p>Você encontrou todos os textos!.</p>
+    </div>
+</div>
+
+<script>
+    // Configuração das datas de liberação (Ano, Mês [0-11], Dia)
+    const unlockDates = {
+        1: new Date(2026, 4, 8),  // 08/05/2026 (Maio é mês 4 no JS)
+        2: new Date(2026, 4, 9),  // 09/05/2026
+        3: new Date(2026, 4, 10), // 10/05/2026
+        4: new Date(2026, 4, 11), // 11/05/2026
+        5: new Date(2026, 4, 12)  // 12/05/2026
+    };
+
+    function checkLevel(currentLevel, correctWord) {
+        const userInput = document.getElementById('input' + currentLevel).value.trim().toUpperCase();
+        
+        if (userInput === correctWord.toUpperCase()) {
+            const nextLevel = currentLevel + 1;
+            
+            // Se houver um próximo nível, verifica a data
+            if (nextLevel <= 5) {
+                const now = new Date();
+                const nextDate = unlockDates[nextLevel];
+                const dateString = nextDate.toLocaleDateString('pt-BR');
+
+                // Verifica se a data atual já chegou na data do próximo nível
+                // Zeramos as horas para comparar apenas os dias
+                const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                const target = new Date(nextDate.getFullYear(), nextDate.getMonth(), nextDate.getDate());
+
+                if (today >= target) {
+                    if (confirm("Correto! Hoje é dia " + today.toLocaleDateString('pt-BR') + ". Deseja prosseguir para o desafio de hoje?")) {
+                        advance(currentLevel, nextLevel);
+                    }
+                } else {
+                    alert("Correto! Mas o próximo poema só será liberado no dia " + dateString + ". Volte amanhã!");
+                    // Opcional: Marcar o atual como concluído visualmente mesmo sem avançar
+                    document.getElementById('dot' + currentLevel).classList.add('completed');
+                }
+            } else {
+                // Se for o último nível
+                document.getElementById('dot' + currentLevel).classList.add('completed');
+                document.getElementById('level' + currentLevel).classList.remove('active');
+                document.getElementById('final-screen').style.display = 'block';
+            }
+        } else {
+            alert("Palavra incorreta! Tente novamente ou procure melhor o poema.");
+        }
+    }
+
+    function advance(current, next) {
+        document.getElementById('dot' + current).classList.add('completed');
+        document.getElementById('level' + current).classList.remove('active');
+        document.getElementById('level' + next).classList.add('active');
+        document.getElementById('dot' + next).classList.add('active');
+    }
+
+    // Verificação inicial: O nível 1 já pode ser jogado?
+    window.onload = function() {
+        const now = new Date();
+        const firstDate = unlockDates[1];
+        if (now < firstDate) {
+            document.getElementById('level1').innerHTML = "<h3>Aguarde...</h3><p>O primeiro desafio será liberado em " + firstDate.toLocaleDateString('pt-BR') + ".</p>";
+        }
+    };
+</script>
+
+</body>
+</html>
