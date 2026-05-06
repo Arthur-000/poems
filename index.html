@@ -10,6 +10,7 @@
             --accent: #e74c3c;
             --bg: #f4f7f6;
             --text: #333;
+            --success: #27ae60;
         }
 
         body {
@@ -32,8 +33,17 @@
         }
 
         h1 { text-align: center; color: var(--primary); margin-bottom: 10px; }
-        .instruction { text-align: center; font-size: 0.9em; color: #666; margin-bottom: 20px; }
         
+        .main-instructions {
+            background: #fff3cd;
+            border: 1px solid #ffeeba;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 0.9em;
+            margin-bottom: 25px;
+            color: #856404;
+        }
+
         .progress-bar {
             display: flex;
             justify-content: space-between;
@@ -56,7 +66,7 @@
         }
 
         .step-dot.active { background: var(--accent); transform: scale(1.2); }
-        .step-dot.completed { background: #27ae60; }
+        .step-dot.completed { background: var(--success); }
 
         .level { display: none; animation: fadeIn 0.5s; }
         .level.active { display: block; }
@@ -67,6 +77,18 @@
             padding: 15px;
             margin: 20px 0;
             font-style: italic;
+        }
+
+        /* Estilo para a revelação do Mimo */
+        .reward-box {
+            display: none;
+            background: #e8f5e9;
+            border: 2px dashed var(--success);
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 8px;
+            text-align: center;
+            animation: bounceIn 0.6s;
         }
 
         input[type="text"] {
@@ -92,15 +114,30 @@
         }
 
         button:hover { background: #34495e; }
+        .btn-next { background: var(--success); margin-top: 10px; }
 
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes bounceIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            70% { transform: scale(1.05); }
+            100% { transform: scale(1); opacity: 1; }
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
     <h1>🔍 Caça-poemas</h1>
-    <p class="instruction">Um novo desafio será liberado a cada dia. Volte amanhã para a próxima pista!</p>
+    
+    <div class="main-instructions">
+        <strong>Como funciona:</strong>
+        <ul>
+            <li>Um novo desafio será liberado a cada dia.</li>
+            <li>Encontre o poema físico no local indicado pela pista.</li>
+            <li>Insira a <strong>última palavra</strong> do poema para liberar a localização de um mimo! 🎁</li>
+            <li>O mimo principal está reservado para o último dia!</li>
+        </ul>
+    </div>
     
     <div class="progress-bar">
         <div class="step-dot active" id="dot1">1</div>
@@ -111,103 +148,116 @@
     </div>
 
     <div class="level active" id="level1">
-        <h3>08/05/2026: A ida</h3>
-        <p>Para começar, você precisa encontrar o primeiro poeminha.</p>
+        <h3>08/05: A ida</h3>
+        <p>Encontre o primeiro poeminha:</p>
         <div class="clue-box">"Procure embaixo da madeira do kit de coquetéis."</div>
-        <input type="text" id="input1" placeholder="Qual a última palavra do poema?">
-        <button onclick="checkLevel(1, 'SAUDADE')">Verificar</button>
+        <div id="ui-1">
+            <input type="text" id="input1" placeholder="Última palavra do poema...">
+            <button onclick="checkLevel(1, 'SAUDADE', 'Vá até à cozinha, está dentro do copo da moringa!')">Verificar</button>
+        </div>
+        <div id="reward-1" class="reward-box"></div>
     </div>
 
     <div class="level" id="level2">
-        <h3>09/05/2026: Percurso</h3>
-        <p>Muito bem! Onde anda o mundo?</p>
+        <h3>09/05: Percurso</h3>
         <div class="clue-box">"Embaixo do mundo (globo terrestre) da sala."</div>
-        <input type="text" id="input2" placeholder="Qual a última palavra do poema?">
-        <button onclick="checkLevel(2, 'MAPA')">Verificar</button>
+        <div id="ui-2">
+            <input type="text" id="input2" placeholder="Última palavra do poema...">
+            <button onclick="checkLevel(2, 'MAPA', 'Está na sala, atrás da caixa de som do lado esquerdo.')">Verificar</button>
+        </div>
+        <div id="reward-2" class="reward-box"></div>
     </div>
 
     <div class="level" id="level3">
-        <h3>10/05/2026: Mães</h3>
+        <h3>10/05: Mães</h3>
         <div class="clue-box">"Embaixo do Sartre, no quarto de hóspedes."</div>
-        <input type="text" id="input3" placeholder="Qual a última palavra do poema?">
-        <button onclick="checkLevel(3, 'FILHINHO')">Verificar</button>
+        <div id="ui-3">
+            <input type="text" id="input3" placeholder="Última palavra do poema...">
+            <button onclick="checkLevel(3, 'FILHINHO', 'Está atrás da geladeira!')">Verificar</button>
+        </div>
+        <div id="reward-3" class="reward-box"></div>
     </div>
 
     <div class="level" id="level4">
-        <h3>11/05/2026: Retorno</h3>
+        <h3>11/05: Retorno</h3>
         <div class="clue-box">"O poema vive na caixinha, junto com os dinossauros."</div>
-        <input type="text" id="input4" placeholder="Qual a última palavra do poema?">
-        <button onclick="checkLevel(4, 'DESCOMPOSTO')">Verificar</button>
+        <div id="ui-4">
+            <input type="text" id="input4" placeholder="Última palavra do poema...">
+            <button onclick="checkLevel(4, 'DESCOMPOSTO', 'Está debaixo da mesinha de bebidas!')">Verificar</button>
+        </div>
+        <div id="reward-4" class="reward-box"></div>
     </div>
 
     <div class="level" id="level5">
-        <h3>12/05/2026: Chegada</h3>
+        <h3>12/05: A Grande Chegada</h3>
         <div class="clue-box">"Atrás do espelho da sala..."</div>
-        <input type="text" id="input5" placeholder="Qual a última palavra do poema?">
-        <button onclick="checkLevel(5, 'ABARCAR')">Finalizar</button>
+        <div id="ui-5">
+            <input type="text" id="input5" placeholder="Última palavra do poema...">
+            <button onclick="checkLevel(5, 'ABARCAR', 'O MIMO FINAL: Está colado atrás da porta de correr do móvel da sala onde fica a TV.')">Finalizar</button>
+        </div>
+        <div id="reward-5" class="reward-box"></div>
     </div>
 
     <div id="final-screen" style="display:none; text-align:center;">
         <h2>🎉 Parabéns!</h2>
-        <p>Você encontrou todos os textos!.</p>
+        <p>Você completou toda a jornada e encontrou todos os mimos!</p>
     </div>
 </div>
 
 <script>
-    // Configuração das datas de liberação (Ano, Mês [0-11], Dia)
     const unlockDates = {
-        1: new Date(2026, 4, 8),  // 08/05/2026 (Maio é mês 4 no JS)
-        2: new Date(2026, 4, 9),  // 09/05/2026
-        3: new Date(2026, 4, 10), // 10/05/2026
-        4: new Date(2026, 4, 11), // 11/05/2026
-        5: new Date(2026, 4, 12)  // 12/05/2026
+        1: new Date(2026, 4, 8),
+        2: new Date(2026, 4, 9),
+        3: new Date(2026, 4, 10),
+        4: new Date(2026, 4, 11),
+        5: new Date(2026, 4, 12)
     };
 
-    function checkLevel(currentLevel, correctWord) {
+    function checkLevel(currentLevel, correctWord, rewardLocation) {
         const userInput = document.getElementById('input' + currentLevel).value.trim().toUpperCase();
         
         if (userInput === correctWord.toUpperCase()) {
-            const nextLevel = currentLevel + 1;
+            // 1. Esconde o campo de input e botão
+            document.getElementById('ui-' + currentLevel).style.display = 'none';
             
-            // Se houver um próximo nível, verifica a data
-            if (nextLevel <= 5) {
-                const now = new Date();
-                const nextDate = unlockDates[nextLevel];
-                const dateString = nextDate.toLocaleDateString('pt-BR');
-
-                // Verifica se a data atual já chegou na data do próximo nível
-                // Zeramos as horas para comparar apenas os dias
-                const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-                const target = new Date(nextDate.getFullYear(), nextDate.getMonth(), nextDate.getDate());
-
-                if (today >= target) {
-                    if (confirm("Correto! Hoje é dia " + today.toLocaleDateString('pt-BR') + ". Deseja prosseguir para o desafio de hoje?")) {
-                        advance(currentLevel, nextLevel);
-                    }
-                } else {
-                    alert("Correto! Mas o próximo poema só será liberado no dia " + dateString + ". Volte amanhã!");
-                    // Opcional: Marcar o atual como concluído visualmente mesmo sem avançar
-                    document.getElementById('dot' + currentLevel).classList.add('completed');
-                }
+            // 2. Mostra a localização do mimo
+            const rewardBox = document.getElementById('reward-' + currentLevel);
+            rewardBox.innerHTML = `<h3>🎁 Você encontrou um mimo!</h3><p>${rewardLocation}</p>`;
+            
+            if(currentLevel < 5) {
+                rewardBox.innerHTML += `<button class="btn-next" onclick="tryAdvance(${currentLevel})">Próximo Desafio</button>`;
             } else {
-                // Se for o último nível
-                document.getElementById('dot' + currentLevel).classList.add('completed');
-                document.getElementById('level' + currentLevel).classList.remove('active');
-                document.getElementById('final-screen').style.display = 'block';
+                rewardBox.innerHTML += `<button class="btn-next" onclick="finishGame(${currentLevel})">Concluir Jornada</button>`;
             }
+            
+            rewardBox.style.display = 'block';
+            document.getElementById('dot' + currentLevel).classList.add('completed');
+            
         } else {
-            alert("Palavra incorreta! Tente novamente ou procure melhor o poema.");
+            alert("Palavra incorreta! Verifique a última palavra do poema que você encontrou.");
         }
     }
 
-    function advance(current, next) {
-        document.getElementById('dot' + current).classList.add('completed');
-        document.getElementById('level' + current).classList.remove('active');
-        document.getElementById('level' + next).classList.add('active');
-        document.getElementById('dot' + next).classList.add('active');
+    function tryAdvance(currentLevel) {
+        const nextLevel = currentLevel + 1;
+        const now = new Date();
+        const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        const target = unlockDates[nextLevel];
+
+        if (today >= target) {
+            document.getElementById('level' + currentLevel).classList.remove('active');
+            document.getElementById('level' + nextLevel).classList.add('active');
+            document.getElementById('dot' + nextLevel).classList.add('active');
+        } else {
+            alert("Parabéns pelo mimo de hoje! O próximo poema e o próximo presente só serão liberados em " + target.toLocaleDateString('pt-BR') + ". Volte amanhã!");
+        }
     }
 
-    // Verificação inicial: O nível 1 já pode ser jogado?
+    function finishGame(currentLevel) {
+        document.getElementById('level' + currentLevel).classList.remove('active');
+        document.getElementById('final-screen').style.display = 'block';
+    }
+
     window.onload = function() {
         const now = new Date();
         const firstDate = unlockDates[1];
